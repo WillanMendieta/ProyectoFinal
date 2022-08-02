@@ -7,8 +7,7 @@ posicionXbola=400
 posicionYdeJugador=650                                             
 vid_writer = imageio.get_writer('VideoJuego.avi')
 kernel = np.ones((6,6),np.uint8)# Kernel usando para la tanformacion morfologica
-while True:
-    #posicionXMouse=550         
+while True:        
     pyautogui.typewrite(["space"])     
     #Marco I= 200 H 220 D 650 L 750
     capPantalla = pyautogui.screenshot(region=(220, 220, 630, 750))#Captura la pantalla
@@ -29,9 +28,7 @@ while True:
     #cv2.circle(capPantalla, (int(posicionXbola), int(200)), 70,(255, 255, 0), 20)#se dibuja el circulo posicion de la bola
     pyautogui.moveTo(int(posicionXbola+250),posicionYdeJugador)#ubica el cursor 
     #cv2.circle(capPantalla, (int(300), int(posicionYdeJugador)), 70,(255, 255, 0), 4)#se dibuja el circulo posicion del jugador
-    
-    Pantalla1 = cv2.cvtColor(capPantalla, cv2.COLOR_BGR2GRAY)# se covierte de nuevo para poder concatenar las dos pantallas tanto la del juego
-    # como la deteccion de bordes
+    Pantalla1 = cv2.cvtColor(capPantalla, cv2.COLOR_BGR2GRAY)# se covierte de nuevo para poder concatenar las dos pantallas
     unido = cv2.hconcat([Pantalla1 ,imag_Bordes])#concatena las pantallas
     video = cv2.resize(unido,(700,600))# se realiza un resize para tener dimenciones cuerentes al mostrar el video.
 
