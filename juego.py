@@ -3,12 +3,10 @@ import numpy as np
 import imageio
 import pyautogui
 
-posicionXbola=400                     
-#posicionXMouse=455
-posicionXdeJugador=300       
+posicionXbola=400                         
 posicionYdeJugador=650                                             
 vid_writer = imageio.get_writer('VideoJuego.avi')
-
+kernel = np.ones((6,6),np.uint8)# Kernel usando para la tanformacion morfologica
 while True:
     posicionXMouse=550         
     pyautogui.typewrite(["space"])     
@@ -16,12 +14,8 @@ while True:
     capPantalla = pyautogui.screenshot(region=(220, 220, 630, 750))#Captura la pantalla
     capPantalla = np.array(capPantalla)#convierte la Pantalla en array para por ser trabajar
     capPantalla = cv2.cvtColor(capPantalla, cv2.COLOR_RGB2BGR) # se comvierte a BGR
-    
-    kernel = np.ones((6,6),np.uint8)# se crea el kernel el cual se realiza el barrido de la imagen
-   
-    apertura = cv2.morphologyEx(capPantalla, cv2.MORPH_OPEN, kernel)#dibujar contornos de la capPantalla
-    imag_Bordes = cv2.Canny(apertura,630, 750,apertureSize = 5)# dibuja los bordes dando como la apertura 5, ya que con la apertura 5 
-    #se logra determinar los bordes del objeto con mas claridad
+    apertura = cv2.morphologyEx(capPantalla, cv2.MORPH_OPEN, kernel)#Limpieza de ruido mediante dilatacion
+    imag_Bordes = cv2.Canny(apertura,630, 750,apertureSize = 5)# se obtiene los bordes 
 
     contours, hierarchy  = cv2.findContours(imag_Bordes,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)#detectamos los contornos de la imagen
     #Se recorre los n contornos encontrados de la imagen 
@@ -35,7 +29,7 @@ while True:
                 posicionXbola=x   
     cv2.circle(capPantalla, (int(posicionXbola), int(200)), 70,(255, 255, 0), 20     )
     pyautogui.moveTo(int(posicionXbola+250),posicionYdeJugador)
-    cv2.circle(capPantalla, (int(posicionXdeJugador), int(posicionYdeJugador)), 70,(255, 255, 0), 4)
+    cv2.circle(capPantalla, (int(300), int(posicionYdeJugador)), 70,(255, 255, 0), 4)
     
     Pantalla1 = cv2.cvtColor(capPantalla, cv2.COLOR_BGR2GRAY)# se covierte de nuevo para poder concatenar las dos pantallas tanto la del juego
     # como la deteccion de bordes
